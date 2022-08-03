@@ -8,12 +8,9 @@ const app = express();
 app.use(express.static("public")); // serve static content instead of console.log
 
 // routes
-/* app.get("/", (req, res) => {
-  // send json response
-  res.json({
-    ok: true,
-  });
-}); */
+// all auth routes are prefixed with /api/auth path
+app.use("/api/auth", require("./routes/auth"));
+//TODO: CRUD events
 
 // listen to petitions
 app.listen(process.env.PORT, () => {
