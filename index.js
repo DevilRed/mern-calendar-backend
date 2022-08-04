@@ -7,6 +7,9 @@ const app = express();
 // public dir
 app.use(express.static("public")); // serve static content instead of console.log
 
+// read body request
+app.use(express.json());
+
 // routes
 // all auth routes are prefixed with /api/auth path
 app.use("/api/auth", require("./routes/auth"));
