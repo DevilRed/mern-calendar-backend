@@ -4,12 +4,9 @@
  */
 
 const { Router } = require("express");
+const { createUser } = require("../controllers/auth");
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.json({
-    ok: true,
-  });
-});
+router.post("/new", createUser);
 
 module.exports = router; // node export system
