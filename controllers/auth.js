@@ -1,17 +1,8 @@
 const { response } = require("express"); // require express to get autocomplete intellisense
-const { validationResult } = require("express-validator");
 
 const createUser = (req, res = response) => {
   const { name, email, password } = req.body;
-  // to get autocomplete intellisense
-  // error handling
-  const errors = validationResult(req); // pass in request object
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      ok: false,
-      errors: errors.mapped(), // show errors in response
-    });
-  }
+  // add response to get autocomplete intellisense
 
   res.status(201).json({
     ok: true,
@@ -22,14 +13,6 @@ const createUser = (req, res = response) => {
   });
 };
 const login = (req, res = response) => {
-  // error handling
-  const errors = validationResult(req); // pass in request object
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      ok: false,
-      errors: errors.mapped(), // show errors in response
-    });
-  }
   const { email, password } = req.body;
   res.json({
     ok: true,
