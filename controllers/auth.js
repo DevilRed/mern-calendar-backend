@@ -1,16 +1,19 @@
-const { response } = require("express"); // to get autocomplete intellisense
+const { response } = require("express"); // require express to get autocomplete intellisense
+const { validationResult } = require("express-validator");
 
 const createUser = (req, res = response) => {
   const { name, email, password } = req.body;
   // to get autocomplete intellisense
-  // add validation example
-  if (name.length < 5) {
+  // error handling
+  const errors = validationResult(req); // pass in request object
+  if (!errors.isEmpty()) {
     return res.status(400).json({
       ok: false,
-      msg: "name must be greather than 5 letters",
+      errors: errors.mapped(), // show errors in response
     });
   }
-  res.status(200).json({
+
+  res.status(201).json({
     ok: true,
     msg: "register",
     name,
