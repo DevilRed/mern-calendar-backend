@@ -22,7 +22,16 @@ router.post(
   createUser
 );
 
-router.post("/", login);
+router.post(
+  "/",
+  [
+    check("email", "email is required").isEmail(),
+    check("password", "password is required").isLength({
+      min: 6,
+    }),
+  ],
+  login
+);
 
 router.get("/renew", renewToken);
 

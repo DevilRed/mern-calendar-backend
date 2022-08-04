@@ -22,9 +22,20 @@ const createUser = (req, res = response) => {
   });
 };
 const login = (req, res = response) => {
+  // error handling
+  const errors = validationResult(req); // pass in request object
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      ok: false,
+      errors: errors.mapped(), // show errors in response
+    });
+  }
+  const { email, password } = req.body;
   res.json({
     ok: true,
     msg: "login",
+    email,
+    password,
   });
 };
 
