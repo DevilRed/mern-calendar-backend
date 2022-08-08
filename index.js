@@ -1,8 +1,12 @@
 const express = require("express");
 require("dotenv").config(); // use .env variables. access variables using "process.env"
+const { dbConnection } = require("./database/config");
 
 // create express server
 const app = express();
+
+// db connection
+dbConnection();
 
 // public dir
 app.use(express.static("public")); // serve static content instead of console.log
