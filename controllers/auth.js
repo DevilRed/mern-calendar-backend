@@ -2,11 +2,19 @@ const { response } = require("express"); // require express to get autocomplete 
 const User = require("../models/User");
 
 const createUser = async (req, res = response) => {
-  // const { name, email, password } = req.body;
+  const { email, password } = req.body;
   // add response to get autocomplete intellisense
   try {
+    // verify email existing
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({
+        ok: false,
+        msg: "The provided email is already in use",
+      });
+    }
     // add new user object
-    const user = new User(req.body);
+    user = new User(req.body);
     // save user
     await user.save();
 
