@@ -1,5 +1,6 @@
 const { response } = require("express"); // require express to get autocomplete intellisense
 const User = require("../models/User");
+const bcrypt = require("bcryptjs");
 
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
@@ -15,12 +16,17 @@ const createUser = async (req, res = response) => {
     }
     // add new user object
     user = new User(req.body);
+
+    // hash user password
+    const salt = bcrypt.genSaltSync(); // generate a random code to be used in encryption
+    user.password = bcrypt.hashSync(password, salt); // apply encryption to password
     // save user
     await user.save();
 
     res.status(201).json({
       ok: true,
-      msg: "register",
+      uid: user.id,
+      name: user.name,
     });
   } catch (error) {
     res.status(500).json({
