@@ -35,14 +35,39 @@ const createUser = async (req, res = response) => {
     });
   }
 };
-const login = (req, res = response) => {
+const login = async (req, res = response) => {
   const { email, password } = req.body;
-  res.json({
-    ok: true,
-    msg: "login",
-    email,
-    password,
-  });
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        ok: false,
+        msg: "user not found",
+      });
+    }
+    // match passwords
+    const validPassword = bcrypt.compareSync(password, user.password); // compare with db
+    if (!validPassword) {
+      return res.status(400).json({
+        ok: false,
+        msg: "password not valid",
+      });
+    }
+
+    // send JWT
+    res.json({
+      ok: true,
+      uid: user.id,
+      name: user.name,
+      // token here
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      msg: "Please contact with site administrator",
+    });
+  }
 };
 
 const renewToken = (req, res = response) => {
