@@ -7,6 +7,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 const { fieldValidator } = require("../middlewares/field-validator");
 const { body } = require("express-validator");
+const { validateJWT } = require("../middlewares/validate-jwt");
 
 const { createUser, login, renewToken } = require("../controllers/auth");
 
@@ -48,6 +49,7 @@ router.post(
   login
 );
 
-router.get("/renew", renewToken);
+// add middleware to revalidate token, if more middlewares are needed use an array otherwise declare only the needed middleware
+router.get("/renew", validateJWT, renewToken);
 
 module.exports = router; // node export system
