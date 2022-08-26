@@ -77,10 +77,14 @@ const login = async (req, res = response) => {
   }
 };
 
-const renewToken = (req, res = response) => {
+const renewToken = async (req, res = response) => {
+  // if a valid token then regenerate it to update the user session
+  const { uid, name } = req;
+  // regenerate JWT
+  const token = await generateJWT(uid, name);
   res.json({
     ok: true,
-    msg: "renew",
+    token,
   });
 };
 
