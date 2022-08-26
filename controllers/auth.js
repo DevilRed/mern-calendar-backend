@@ -1,6 +1,7 @@
 const { response } = require("express"); // require express to get autocomplete intellisense
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const { generateJWT } = require("../helpers/jwt");
 
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
@@ -23,12 +24,17 @@ const createUser = async (req, res = response) => {
     // save user
     await user.save();
 
+    // generate JWT
+    const token = await generateJWT(user.id, user.name);
+
     res.status(201).json({
       ok: true,
       uid: user.id,
       name: user.name,
+      token,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       ok: false,
       msg: "Please contact with site administrator",
@@ -54,13 +60,14 @@ const login = async (req, res = response) => {
         msg: "password not valid",
       });
     }
-
+    // generate JWT
+    const token = await generateJWT(user.id, user.name);
     // send JWT
     res.json({
       ok: true,
       uid: user.id,
       name: user.name,
-      // token here
+      token,
     });
   } catch (error) {
     res.status(500).json({
