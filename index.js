@@ -21,7 +21,7 @@ app.use(express.json());
 // routes
 // all auth routes are prefixed with /api/auth path
 app.use("/api/auth", require("./routes/auth"));
-//TODO: CRUD events
+app.use("/api/events", require("./routes/events"));
 
 // listen to petitions
 app.listen(process.env.PORT, () => {
