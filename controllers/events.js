@@ -12,6 +12,7 @@ const getEvents = async (req, res = response) => {
 };
 
 const addEvent = async (req, res = response) => {
+  console.log(req.body);
   res.status(200).json({
     ok: true,
     msg: "addEvent",
