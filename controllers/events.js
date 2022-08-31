@@ -3,6 +3,7 @@
 	msg: 'controller action name'
 } */
 const { response } = require("express");
+const Event = require("../models/Event");
 
 const getEvents = async (req, res = response) => {
   res.status(200).json({
@@ -12,11 +13,21 @@ const getEvents = async (req, res = response) => {
 };
 
 const addEvent = async (req, res = response) => {
-  console.log(req.body);
-  res.status(200).json({
-    ok: true,
-    msg: "addEvent",
-  });
+  const event = new Event(req.body);
+  try {
+    event.user = req.uid; // get user id from request
+    const dbEvent = await event.save();
+    res.status(200).json({
+      ok: true,
+      event: dbEvent,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      msg: "Talk with the administrator",
+    });
+  }
 };
 
 const updateEvent = async (req, res = response, id) => {

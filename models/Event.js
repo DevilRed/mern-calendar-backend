@@ -10,17 +10,25 @@ const EventSchema = Schema({
   },
   start: {
     type: Date, // Date is a JS date
-    require: true,
+    required: true,
   },
   end: {
     type: Date,
-    require: true,
+    required: true,
   },
   // foreign key
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
+});
+
+// overwrite how mongoose serialize data when returning data from database
+EventSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
 });
 
 // export by default
